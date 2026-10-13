@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesa Dragón — Board Game Café</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Apple System Font Stack -->
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .apple-card {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 20px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .apple-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+        }
+
+        .glass-nav {
+            background: rgba(245, 245, 247, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .apple-button {
+            background-color: #0071e3;
+            color: #ffffff;
+            border-radius: 980px;
+            padding: 8px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .apple-button:hover {
+            background-color: #0077ed;
+        }
+
+        .apple-button:active {
+            transform: scale(0.98);
+        }
+
+        .apple-segmented-btn {
+            background: rgba(0, 0, 0, 0.04);
+            color: #515154;
+            border-radius: 980px;
+            padding: 6px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .apple-segmented-btn.active {
+            background: #1d1d1f;
+            color: #ffffff;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 glass-nav border-b border-black/5">
+        <div class="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-2">
+                <span class="text-xl">🐉</span>
+                <span class="font-semibold tracking-tight text-sm md:text-base text-[#1d1d1f]">Mesa Dragón</span>
+            </a>
+            
+            <div class="flex items-center gap-3">
+                <a href="#catalogo" class="hidden sm:inline-block text-xs font-medium text-[#515154] hover:text-[#1d1d1f] transition">Catálogo</a>
+                <a href="#info" class="hidden sm:inline-block text-xs font-medium text-[#515154] hover:text-[#1d1d1f] transition">Experiencia</a>
+                <a href="#ubicacion" class="hidden sm:inline-block text-xs font-medium text-[#515154] hover:text-[#1d1d1f] transition">Ubicación</a>
+                <button onclick="openBookingModal()" class="apple-button text-xs">
+                    Reservar Mesa
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 w-full flex-grow space-y-16">
+
+        <!-- Hero Section -->
+        <section class="text-center space-y-6 pt-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-[#515154] text-xs font-medium">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                Abierto de Martes a Domingo
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-[#1d1d1f] max-w-2xl mx-auto leading-tight">
+                Juega, descubre y comparte.
+            </h1>
+            
+            <p class="text-[#86868b] text-base md:text-lg max-w-xl mx-auto font-normal leading-relaxed">
+                Más de 60 juegos de mesa cuidadosamente seleccionados, café de especialidad y comida artesanal en un espacio diseñado para conectar.
+            </p>
+
+            <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+                <button onclick="openBookingModal()" class="apple-button px-6 py-2.5 text-sm font-medium shadow-sm">
+                    Reservar una mesa
+                </button>
+                <a href="#catalogo" class="px-6 py-2.5 rounded-full bg-black/5 hover:bg-black/10 text-[#1d1d1f] text-sm font-medium transition">
+                    Explorar catálogo
+                </a>
+            </div>
+        </section>
+
+        <!-- Apple Bento Grid / Experience Highlights -->
+        <section id="info" class="space-y-4">
+            <div class="text-center md:text-left space-y-1">
+                <h2 class="text-2xl font-bold tracking-tight text-[#1d1d1f]">La Experiencia Mesa Dragón</h2>
+                <p class="text-sm text-[#86868b]">Diseñado para novatos y veteranos por igual.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Card 1: Rules Explained -->
+                <div class="apple-card p-6 flex flex-col justify-between space-y-4">
+                    <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg font-semibold">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="font-semibold text-base text-[#1d1d1f]">Te explicamos cómo jugar</h3>
+                        <p class="text-xs text-[#86868b] leading-relaxed">Nuestros anfitriones te enseñan las reglas desde cero para que comiences a divertirte en minutos sin leer manuales.</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Groups & Rol -->
+                <div class="apple-card p-6 flex flex-col justify-between space-y-4">
+                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg font-semibold">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="font-semibold text-base text-[#1d1d1f]">Para grupos de hasta 12 personas</h3>
+                        <p class="text-xs text-[#86868b] leading-relaxed">Espacios amplios y cómodos adaptados para parejas, grandes grupos de amigos y épicas campañas de juegos de rol.</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: Game variety -->
+                <div class="apple-card p-6 flex flex-col justify-between space-y-4">
+                    <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg font-semibold">
+                        <i class="fa-solid fa-dice-d20"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="font-semibold text-base text-[#1d1d1f]">Rápidas, estratégicas y largas</h3>
+                        <p class="text-xs text-[#86868b] leading-relaxed">Desde party games dinámicos de 15 minutos hasta complejos juegos de estrategia y gestión de recursos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Catalogue Section (No Order Buttons, Pure Exploration) -->
+        <section id="catalogo" class="space-y-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-black/5 pb-6">
+                <div class="space-y-1">
+                    <h2 class="text-2xl font-bold tracking-tight text-[#1d1d1f]">Nuestro Catálogo</h2>
+                    <p class="text-sm text-[#86868b]">Explora los juegos disponibles en el local, además de nuestra selección de bebidas y comida.</p>
+                </div>
+
+                <!-- Spotlight Search Bar -->
+                <div class="relative w-full md:w-72">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-[#86868b] text-xs"></i>
+                    <input type="text" id="searchInput" oninput="filterCatalog()" placeholder="Buscar juego, bebida o comida..." class="w-full bg-white border border-black/10 rounded-full pl-9 pr-4 py-2 text-xs text-[#1d1d1f] placeholder-[#86868b] focus:outline-none focus:border-[#0071e3] transition shadow-sm">
+                </div>
+            </div>
+
+            <!-- Filter Controls Container -->
+            <div class="space-y-3">
+                <!-- Category Segmented Tabs -->
+                <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-1">
+                    <span class="text-xs font-semibold text-[#86868b] uppercase tracking-wider mr-1">Categoría:</span>
+                    <button onclick="setCategory('todos')" class="apple-segmented-btn active" data-cat="todos">Todos</button>
+                    <button onclick="setCategory('juegos')" class="apple-segmented-btn" data-cat="juegos">Juegos de Mesa</button>
+                    <button onclick="setCategory('comida')" class="apple-segmented-btn" data-cat="comida">Comida</button>
+                    <button onclick="setCategory('bebidas')" class="apple-segmented-btn" data-cat="bebidas">Bebidas</button>
+                </div>
+
+                <!-- Player Count Filter (Applies mainly to games or all) -->
+                <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-1">
+                    <span class="text-xs font-semibold text-[#86868b] uppercase tracking-wider mr-1">Jugadores:</span>
+                    <button onclick="setPlayers('todos')" class="apple-segmented-btn active" data-players="todos">Todos</button>
+                    <button onclick="setPlayers('1-4')" class="apple-segmented-btn" data-players="1-4">1 - 4 Jugadores</button>
+                    <button onclick="setPlayers('5-8')" class="apple-segmented-btn" data-players="5-8">5 - 8 Jugadores</button>
+                    <button onclick="setPlayers('9+')" class="apple-segmented-btn" data-players="9+">9 - 12 Jugadores</button>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+                <!-- Dynamically populated via JavaScript -->
+            </div>
+
+            <div id="noResults" class="hidden text-center py-12 space-y-2">
+                <p class="text-sm font-medium text-[#1d1d1f]">No se encontraron resultados</p>
+                <p class="text-xs text-[#86868b]">Prueba con otra palabra clave o restablece los filtros.</p>
+            </div>
+        </section>
+
+        <!-- Community & Location Footer Section -->
+        <section id="ubicacion" class="apple-card p-6 md:p-8 space-y-6">
+            <div class="text-center space-y-1">
+                <h2 class="text-2xl font-bold tracking-tight text-[#1d1d1f]">Comunidad & Ubicación</h2>
+                <p class="text-sm text-[#86868b]">Conéctate con nuestra comunidad y visítanos cuando quieras.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                <!-- Left: Hours & Maps -->
+                <div class="space-y-4 bg-[#f5f5f7] p-5 rounded-2xl border border-black/5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 text-[#0071e3] flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold text-[#1d1d1f] uppercase tracking-wider">Horarios</h4>
+                            <p class="text-xs text-[#515154]">Martes a Domingo: 16:00 - 23:30</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold text-[#1d1d1f] uppercase tracking-wider">Dirección</h4>
+                            <p class="text-xs text-[#515154]">Calle Colón entre Domingo Paz y Av. Potosí</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-2">
+                        <a href="https://maps.app.goo.gl/MJPkHdhoheGRVc2w5" target="_blank" rel="noopener" class="w-full block text-center bg-white border border-black/10 hover:border-black/20 text-[#1d1d1f] text-xs font-semibold py-2.5 rounded-xl transition shadow-sm">
+                            <i class="fa-solid fa-map-location-dot mr-1.5 text-[#0071e3]"></i> Abrir en Google Maps
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right: Social Hub & WhatsApp Group -->
+                <div class="space-y-4 bg-[#f5f5f7] p-5 rounded-2xl border border-black/5 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-bold text-[#1d1d1f] uppercase tracking-wider">Redes y Comunidad</h4>
+                        <div class="grid grid-cols-2 gap-2">
+                            <a href="https://www.instagram.com/mesadragontja?mdxt=MWRlcGoybHAyZjYzcQ==" target="_blank" rel="noopener" class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-black/5 hover:border-black/15 text-xs font-medium text-[#1d1d1f] transition">
+                                <i class="fa-brands fa-instagram text-pink-500 text-sm"></i> Instagram
+                            </a>
+                            <a href="https://www.tiktok.com/@mesa.dragn?_r=1&_t=ZS-9AWHUUgaQar" target="_blank" rel="noopener" class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-black/5 hover:border-black/15 text-xs font-medium text-[#1d1d1f] transition">
+                                <i class="fa-brands fa-tiktok text-cyan-500 text-sm"></i> TikTok
+                            </a>
+                            <a href="https://www.facebook.com/share/1Fre4ENvcF/" target="_blank" rel="noopener" class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-black/5 hover:border-black/15 text-xs font-medium text-[#1d1d1f] transition">
+                                <i class="fa-brands fa-facebook text-blue-600 text-sm"></i> Facebook
+                            </a>
+                            <a href="https://wa.me/59174953370" target="_blank" rel="noopener" class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-black/5 hover:border-black/15 text-xs font-medium text-[#1d1d1f] transition">
+                                <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i> Comunidades
+                            </a>
+                        </div>
+                    </div>
+
+                    <button onclick="openBookingModal()" class="w-full apple-button text-xs py-2.5 shadow-sm">
+                        Reservar Mesa por WhatsApp
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-5xl mx-auto px-6 py-8 w-full border-t border-black/5 text-center text-xs text-[#86868b] space-y-1">
+        <p class="font-medium text-[#515154]">Mesa Dragón Board Game Café</p>
+        <p>© 2026 Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="apple-card bg-white w-full max-w-md p-6 md:p-8 relative space-y-5 shadow-2xl">
+            <button onclick="closeBookingModal()" class="absolute top-5 right-5 text-[#86868b] hover:text-[#1d1d1f] w-7 h-7 rounded-full bg-black/5 flex items-center justify-center text-xs transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="text-center space-y-1">
+                <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mx-auto mb-2">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </div>
+                <h3 class="text-xl font-bold tracking-tight text-[#1d1d1f]">Reservar Mesa</h3>
+                <p class="text-xs text-[#86868b]">Indícanos los detalles y te conectaremos con nuestro WhatsApp.</p>
+            </div>
+
+            <form id="bookingForm" onsubmit="sendWhatsAppBooking(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-medium text-[#515154] mb-1">Tu Nombre *</label>
+                    <input type="text" id="bookName" required placeholder="Ej. Camila Silva" class="w-full bg-[#f5f5f7] border border-black/10 rounded-xl px-3.5 py-2.5 text-[#1d1d1f] placeholder-[#86868b] focus:outline-none focus:border-[#0071e3]">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-medium text-[#515154] mb-1">Personas *</label>
+                        <select id="bookPeople" class="w-full bg-[#f5f5f7] border border-black/10 rounded-xl px-3 py-2.5 text-[#1d1d1f] focus:outline-none focus:border-[#0071e3]">
+                            <option value="2 personas">2 personas</option>
+                            <option value="3-4 personas" selected>3 - 4 personas</option>
+                            <option value="5-8 personas">5 - 8 personas</option>
+                            <option value="9-12 personas">9 - 12 personas (Grupo)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-medium text-[#515154] mb-1">Fecha *</label>
+                        <input type="date" id="bookDate" required class="w-full bg-[#f5f5f7] border border-black/10 rounded-xl px-3.5 py-2.5 text-[#1d1d1f] focus:outline-none focus:border-[#0071e3]">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-medium text-[#515154] mb-1">Hora aproximada *</label>
+                    <select id="bookTime" class="w-full bg-[#f5f5f7] border border-black/10 rounded-xl px-3 py-2.5 text-[#1d1d1f] focus:outline-none focus:border-[#0071e3]">
+                        <option value="16:00">16:00 hs</option>
+                        <option value="17:30">17:30 hs</option>
+                        <option value="19:00" selected>19:00 hs</option>
+                        <option value="20:30">20:30 hs</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="w-full apple-button py-3 text-xs font-semibold shadow-sm mt-2 flex items-center justify-center gap-1.5">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Enviar solicitud por WhatsApp
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        /* 
+           ====================================================================
+           ÁREA PARA AGREGAR FÁCILMENTE TUS PRODUCTOS REALES
+           ====================================================================
+           Propiedades por producto:
+           - id: Número único
+           - name: Nombre del producto o juego
+           - category: 'juegos', 'comida', o 'bebidas'
+           - playerRange: '1-4', '5-8', '9+' (o '' si es comida/bebida)
+           - duration: Duración estimada (ej. '60 min', '15-30 min', o '')
+           - description: Breve descripción
+           - image: Enlace URL de la imagen
+        */
+        const PRODUCTS = [
+            {
+                id: 1,
+                name: "Catan",
+                category: "juegos",
+                playerRange: "1-4",
+                duration: "60-90 min",
+                description: "Comercia, construye y domina la isla de Catan en este clásico moderno.",
+                image: "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 2,
+                name: "Codenames",
+                category: "juegos",
+                playerRange: "5-8",
+                duration: "15 min",
+                description: "Juego de deducción y espías ideal para grupos grandes.",
+                image: "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 3,
+                name: "Dungeons & Dragons (Sesión Rol)",
+                category: "juegos",
+                playerRange: "9+",
+                duration: "180+ min",
+                description: "Campañas inmersivas guiadas por Master experimentados.",
+                image: "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 4,
+                name: "Hamburguesa Dragón Furia",
+                category: "comida",
+                playerRange: "",
+                duration: "",
+                description: "Carne 180g, queso cheddar doble, tocino crujiente y salsa secreta.",
+                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 5,
+                name: "Nachos de la Mazmorra",
+                category: "comida",
+                playerRange: "",
+                duration: "",
+                description: "Totopos crujientes con queso fundido, guacamole y jalapeños.",
+                image: "https://images.unsplash.com/photo-1585238342024-78d387f4a707?auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 6,
+                name: "Batido de Chocolate Alquimia",
+                category: "bebidas",
+                playerRange: "",
+                duration: "",
+                description: "Batido cremoso de cacao fino con crema batida artesanal.",
+                image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 7,
+                name: "Poción de Maná (Mocktail)",
+                category: "bebidas",
+                playerRange: "",
+                duration: "",
+                description: "Refrescante combinación de arándanos, limonada y toque efervescente.",
+                image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=500&q=80"
+            }
+        ];
+
+        // State variables
+        let selectedCategory = 'todos';
+        let selectedPlayers = 'todos';
+        let searchQuery = '';
+
+        window.onload = function() {
+            renderCatalog();
+            // Default date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('bookDate').value = today;
+        };
+
+        function renderCatalog() {
+            const grid = document.getElementById('catalogGrid');
+            const noResults = document.getElementById('noResults');
+
+            grid.innerHTML = '';
+
+            const filtered = PRODUCTS.filter(item => {
+                const matchCat = selectedCategory === 'todos' || item.category === selectedCategory;
+                
+                let matchPlayers = true;
+                if (selectedPlayers !== 'todos') {
+                    if (item.category === 'juegos') {
+                        matchPlayers = item.playerRange === selectedPlayers;
+                    } else {
+                        // Food/drinks don't filter out unless category matches strictly
+                        matchPlayers = false; 
+                    }
+                }
+
+                const matchSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                    item.description.toLowerCase().includes(searchQuery.toLowerCase());
+
+                return matchCat && (selectedPlayers === 'todos' || matchPlayers) && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+                filtered.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = "apple-card p-4 flex flex-col justify-between space-y-3";
+                    
+                    let metaInfo = '';
+                    if (item.category === 'juegos') {
+                        metaInfo = `
+                            <div class="flex items-center gap-3 text-[11px] text-[#86868b] pt-2 border-t border-black/5">
+                                <span class="flex items-center gap-1"><i class="fa-solid fa-users text-[#0071e3]"></i> ${item.playerRange} jug.</span>
+                                <span class="flex items-center gap-1"><i class="fa-solid fa-clock text-[#0071e3]"></i> ${item.duration}</span>
+                            </div>
+                        `;
+                    }
+
+                    card.innerHTML = `
+                        <div class="space-y-3">
+                            <div class="w-full h-36 rounded-xl overflow-hidden bg-[#f5f5f7]">
+                                <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover" loading="lazy">
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] font-semibold uppercase tracking-wider text-[#86868b]">${item.category}</span>
+                                </div>
+                                <h3 class="font-semibold text-sm text-[#1d1d1f]">${item.name}</h3>
+                                <p class="text-xs text-[#86868b] leading-snug">${item.description}</p>
+                            </div>
+                        </div>
+                        ${metaInfo}
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        function setCategory(cat) {
+            selectedCategory = cat;
+            document.querySelectorAll('[data-cat]').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            renderCatalog();
+        }
+
+        function setPlayers(players) {
+            selectedPlayers = players;
+            document.querySelectorAll('[data-players]').forEach(btn => {
+                if (btn.dataset.players === players) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            renderCatalog();
+        }
+
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderCatalog();
+        });
+
+        function openBookingModal() {
+            document.getElementById('bookingModal').classList.remove('hidden');
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.add('hidden');
+        }
+
+        function sendWhatsAppBooking(e) {
+            e.preventDefault();
+            const name = document.getElementById('bookName').value;
+            const people = document.getElementById('bookPeople').value;
+            const date = document.getElementById('bookDate').value;
+            const time = document.getElementById('bookTime').value;
+
+            let msg = `¡Hola Mesa Dragón! 🐉 Deseo reservar una mesa:%0A%0A`;
+            msg += `👤 *Nombre:* ${encodeURIComponent(name)}%0A`;
+            msg += `👥 *Personas:* ${encodeURIComponent(people)}%0A`;
+            msg += `📅 *Fecha:* ${encodeURIComponent(date)}%0A`;
+            msg += `⏰ *Hora:* ${encodeURIComponent(time)}%0A%0A`;
+            msg += `¿Me confirman disponibilidad?`;
+
+            // Replace with actual business WhatsApp number
+            const phone = "59174953370";
+            window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+            closeBookingModal();
+        }
+    </script>
+</body>
+</html>
